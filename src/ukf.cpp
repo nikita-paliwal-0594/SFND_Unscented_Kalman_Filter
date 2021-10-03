@@ -1,5 +1,6 @@
 #include "ukf.h"
 #include "Eigen/Dense"
+#include <iostream>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -75,7 +76,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
   {
     if (meas_package.sensor_type_ == MeasurementPackage::LASER)
     {
-      x_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1], 0, 0, 0;    // initialize using lidar
+      // initialize using lidar
+      x_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1], 0, 0, 0;    
     }
     else if (meas_package.sensor_type_ == MeasurementPackage::RADAR)
     {
@@ -83,7 +85,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
       double phi = meas_package.raw_measurements_[1];
       double rho_dot = meas_package.raw_measurements_[2];
 
-      x_ << rho * cos(phi), rho * sin(phi), 0, 0, 0;                                           // initialize using radar
+      // initialize using radar
+      x_ << rho * cos(phi), rho * sin(phi), 0, 0, 0;                                           
     }
     else
     {
@@ -146,7 +149,7 @@ void UKF::Prediction(double delta_t) {
     Xsig_aug.col(i + 1 + n_aug_) = x_aug - sqrt(lambda_ + n_aug_) * L.col(i);
   }
 
-  /********* sigma points prediction *********/
+  // sigma points prediction 
   for (int i = 0; i < 2 * n_aug_ + 1; ++i)
   {
     double p_x = Xsig_aug(0, i);
